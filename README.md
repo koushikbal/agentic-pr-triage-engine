@@ -2,12 +2,11 @@
 
 Production-oriented implementation for parsing failed CI logs, collecting PR context, generating a constrained patch, verifying it, and opening a follow-up pull request.
 
-```mermaid
-flowchart LR
- A[Workflow failure] --> B[Fetch logs] --> C[Parse traceback] --> D[Build PR context] --> E[LLM patch generation] --> F[Sandbox pytest verification]
- F -->|failed and attempts < 3| E
- F -->|passed| G[Commit branch and open PR]
- F -->|exhausted| H[Stop with diagnostic status]
+```text
+CI FAILURE  ──▶  TRIAGE  ──▶  CONTEXT  ──▶  PATCH  ──▶  VERIFY  ──▶  PR
+   logs          signal       code         diff       pytest      review
+                                      ▲                 │
+                                      └── retry up to 3 ┘
 ```
 
 ## Setup
